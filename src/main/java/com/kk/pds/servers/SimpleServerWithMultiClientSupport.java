@@ -6,10 +6,15 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SimpleServerWithMultiClientSupport {
     public static void main(String[] args) {
         int port = 12345; // Server will listen on this port
+        int numberOfThreadsToRun = 10;
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreadsToRun);
+
         while (true) {
             try (ServerSocket serverSocket = new ServerSocket(port)) {
                 System.out.println("Server started. Listening on port " + port);
@@ -17,7 +22,8 @@ public class SimpleServerWithMultiClientSupport {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Accepted connection from " + clientSocket.getInetAddress());
                 // Handle client connection in a separate thread
-                new Thread(() -> handleClient(clientSocket)).start();
+                executorService.submit(() -> {handleClient(clientSocket);});
+                //new Thread(() -> handleClient(clientSocket)).start();
 
             } catch (IOException e) {
                 e.printStackTrace();
