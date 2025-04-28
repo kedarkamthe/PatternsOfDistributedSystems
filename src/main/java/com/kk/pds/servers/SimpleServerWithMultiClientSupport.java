@@ -22,7 +22,7 @@ public class SimpleServerWithMultiClientSupport {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Accepted connection from " + clientSocket.getInetAddress());
                 // Handle client connection in a separate thread
-                executorService.submit(() -> {handleClient(clientSocket);});
+                executorService.submit(() -> handleClient(clientSocket));
                 //new Thread(() -> handleClient(clientSocket)).start();
 
             } catch (IOException e) {
